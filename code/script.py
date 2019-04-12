@@ -29,16 +29,14 @@ def load_embeddings(filepath: str) -> Dict[str, np.array]:
     def _get_vec(word, *arr):
         return word, np.asarray(arr, dtype='float32')
 
-    with open(filepath, encoding="utf8", errors='ignore') as embeddings_file:
-        word_embeddings = dict(_get_vec(*line.split(' '))
+    with open(filepath) as embeddings_file:
+        word_embeddings = dict(_get_vec(*line.strip().split(' '))
                                for line in embeddings_file)
-
-    # sanity check word vector length
-    words_to_del = {
-        word for word, vec in word_embeddings.items() if len(vec) != 300
-    }
-    for word in words_to_del:
-        del word_embeddings[word]
+        words_to_del = {
+            word for word, vec in word_embeddings.items() if len(vec) != 300
+        }
+        for word in words_to_del:
+            del word_embeddings[word]
     return word_embeddings
 
 
